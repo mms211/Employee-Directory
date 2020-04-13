@@ -1,0 +1,12 @@
+.jumbotron-fluid {
+    background-color: navy;
+    color: white;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    height: 150px;
+    border-bottom: 5px solid darkred;
+}
+
+h1 {
+    padding-top: 15px;
+}

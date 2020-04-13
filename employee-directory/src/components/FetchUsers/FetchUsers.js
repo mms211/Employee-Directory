@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './FetchUsers.css'
 
 class FetchUsers extends Component {
 
@@ -7,19 +8,19 @@ class FetchUsers extends Component {
         people: [],
     };
 
-    async componentDidMount() {
+    async componentDidMount () {
         const url = "https://api.randomuser.me/?results=10&nat=us";
         const response = await fetch(url);
         const data = await response.json();
         this.setState({ people: data.results, loading: false })
     }
 
-    render() {
+    render = () => {
         return <div>
             {this.state.loading || !this.state.people ? (
                 <div>loading...</div>
             ) : (
-                    <div>
+                    <div className="employee-table">
                         <table className="table table-striped">
                             <thead>
                                 <tr>
@@ -33,7 +34,7 @@ class FetchUsers extends Component {
                             {this.state.people.map(person => (
                                 <tbody key={person.login.uuid}>
                                     <tr>
-                                        <th scope="row"><img src={person.picture.medium} /></th>
+                                        <th scope="row"><img src={person.picture.medium} alt={person.name.first + " " + person.name.last}/></th>
                                         <td>{person.name.first + " " + person.name.last}</td>
                                         <td>{person.phone}</td>
                                         <td>{person.email}</td>
