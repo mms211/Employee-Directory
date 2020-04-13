@@ -1,19 +1,36 @@
 import React, { Component } from 'react';
-import './FetchUsers.css'
+import './FetchUsers.css';
 
 class FetchUsers extends Component {
 
-    state = {
-        loading: true,
-        people: [],
+    constructor(){
+        super()
+        this.state = {
+            loading: true,
+            people: [],
+            filteredPeople: []
+        }
     };
 
-    async componentDidMount () {
+    async componentDidMount() {
         const url = "https://api.randomuser.me/?results=10&nat=us";
         const response = await fetch(url);
         const data = await response.json();
         this.setState({ people: data.results, loading: false })
-    }
+    };
+
+    filterEmployees = (search) => {
+        let filteredPeople = this.state.people;
+        filteredPeople = filteredPeople.filter((person) => {
+            let name = person.name.first.toLowerCase() + person.name.last.toLowerCase()
+            return name.indexOf(
+                search.toLowerCase()) !== -1
+        })
+        this.setState({
+            people: filteredPeople,
+            filteredPeople
+        })
+    };
 
     render = () => {
         return <div>
@@ -21,7 +38,7 @@ class FetchUsers extends Component {
                 <div>loading...</div>
             ) : (
                     <div className="employee-table">
-                        <table className="table table-striped">
+                        <table className="table table-striped table-sortable">
                             <thead>
                                 <tr>
                                     <th scope="col">Image</th>
@@ -31,17 +48,17 @@ class FetchUsers extends Component {
                                     <th scope="col">DOB</th>
                                 </tr>
                             </thead>
-                            {this.state.people.map(person => (
-                                <tbody key={person.login.uuid}>
-                                    <tr>
-                                        <th scope="row"><img src={person.picture.medium} alt={person.name.first + " " + person.name.last}/></th>
+                            <tbody>
+                                {this.state.people.map(person => (
+                                    <tr key={person.login.uuid}>
+                                        <th scope="row"><img src={person.picture.medium} alt={person.name.first + " " + person.name.last} /></th>
                                         <td>{person.name.first + " " + person.name.last}</td>
                                         <td>{person.phone}</td>
                                         <td>{person.email}</td>
                                         <td>{person.dob.date}</td>
                                     </tr>
-                                </tbody>
-                        ))}
+                                ))}
+                            </tbody>
                         </table>
                     </div>
                 )}
